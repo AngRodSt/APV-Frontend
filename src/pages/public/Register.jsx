@@ -9,6 +9,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [alert, setAlert] = useState({})
+  const [charging, setCharging] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,12 +30,15 @@ const Register = () => {
     setAlert({})
 
     try {
+      setCharging(true)
       await axiosClient.post('/veterinarian', { name, email, password })
       setAlert({ msg: "User created successfully! Verify email", error: false })
 
     } catch (error) {
       setAlert({ msg: error.response.data.msg, error: true })
     }
+
+    setCharging(false)
   }
   const { msg } = alert
 
@@ -102,12 +106,13 @@ const Register = () => {
                 onChange={e => setRepeatPassword(e.target.value)}
               />
             </div>
-
+            <div className={`${charging? "flex" : " hidden" } items-center flex-col justify-center  mt-10`}>
+              <span className="loader"></span>
+            </div>
             <div className="mt-5">
-              <input type="submit"
-                className="uppercase font-extrabold bg-cyan-500 hover:bg-cyan-700 p-4 
-                w-full rounded-xl text-white mb-1"
-                value="Create Account" />
+              <button type="submit"
+                className={`${charging? "cursor-not-allowed bg-gray-300 pointer-events-none" : "bg-cyan-500 hover:bg-cyan-700 "} uppercase font-extrabold p-4 w-full rounded-xl text-white mb-1 `}>
+                Create Account </button>
             </div>
 
             <nav className="mt-2 lg:flex lg:justify-between">

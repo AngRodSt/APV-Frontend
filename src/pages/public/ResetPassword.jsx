@@ -7,29 +7,33 @@ import axiosClient from "../../config/axios";
 const ResetPassword = () => {
   const [email, setEmail] = useState('')
   const [alert, setAlert] = useState({})
+  const [charging, setCharging] = useState(false)
 
-  const handleSubmit = async e =>{
+  const handleSubmit = async e => {
     e.preventDefault()
 
-    if(email === ''){
-        setAlert({msg: "The field cannot be empty", error:true})
+    if (email === '') {
+      setAlert({ msg: "The field cannot be empty", error: true })
+      return;
     }
 
     try {
-      const {data} = await axiosClient.post('/veterinarian/reset-password', {email})
-      setAlert({msg: data.msg})
-      
+      setCharging(true)
+      const { data } = await axiosClient.post('/veterinarian/reset-password', { email })
+      setAlert({ msg: data.msg })
+
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
         error: true
       })
     }
+    setCharging(false)
   }
 
 
 
-  const {msg} = alert;
+  const { msg } = alert;
 
   return (
     <>
@@ -53,14 +57,15 @@ const ResetPassword = () => {
                 placeholder="Email" autoComplete="username"
                 onChange={e => setEmail(e.target.value)} />
             </div>
-
-            <div className="mt-5">
-              <input type="submit"
-                className="uppercase font-extrabold bg-cyan-500 hover:bg-cyan-700 p-4 
-                w-full rounded-xl text-white mb-1"
-                value="Send Instructions" />
+            <div className={`${charging? "flex" : " hidden" } items-center flex-col justify-center  mt-10`}>
+              <span className="loader"></span>
             </div>
-
+            <div className="mt-10">
+              <button type="submit"
+                className={`${charging? "cursor-not-allowed bg-gray-300 pointer-events-none" : "bg-cyan-500 hover:bg-cyan-700 "} uppercase font-extrabold p-4 w-full rounded-xl text-white mb-1 `}>
+               Send Instructions
+              </button>
+            </div>
             <nav className="mt-2 lg:flex lg:justify-between">
               <p className="text-gray-500 block text-center">
                 I have an account {""}

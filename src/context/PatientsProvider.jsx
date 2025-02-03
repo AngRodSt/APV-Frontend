@@ -99,7 +99,8 @@ export const PatientProvider = ({ children }) => {
                 savePatient,
                 editPatient,
                 patient,
-                deletePatient
+                deletePatient,
+                setPatient
             }}
         >
 
