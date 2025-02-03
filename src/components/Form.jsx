@@ -13,7 +13,7 @@ const Form = () => {
     const [alert, setAlert] = useState({})
     const [btnActive, setBtnActive] = useState(true)
 
-    const { savePatient, patient } = usePatients()
+    const { savePatient, patient, setPatient} = usePatients()
 
     useEffect(() => {
         if (patient?._id) {
@@ -46,7 +46,9 @@ const Form = () => {
             setEmail('');
             setSymptoms('');
             setDate(new Date().toISOString().split('T')[0]);
-            setId('')
+            setId(null);
+            setPatient([])
+            
         }, 2000);
         
     }

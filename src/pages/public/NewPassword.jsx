@@ -9,13 +9,15 @@ const NewPassword = () => {
     const [alert, setAlert] = useState({})
     const [validToken, setValidToken] = useState(false)
     const [passwordSaved, setPasswordSaved] = useState(false)
+    const [charging, setCharging] = useState(false)
+
 
     const params = useParams();
     const { token } = params;
     console.log(token)
 
     useEffect(() => {
-        const authToken = async ()=>{
+        const authToken = async () => {
             try {
                 await axiosClient(`/veterinarian/reset-password/${token}`);
                 setAlert({
@@ -24,8 +26,8 @@ const NewPassword = () => {
                 setValidToken(true)
             } catch (error) {
                 setAlert({
-                    msg:'There was an error in the link',
-                    error:true
+                    msg: 'There was an error in the link',
+                    error: true
                 })
             }
         }
@@ -37,26 +39,27 @@ const NewPassword = () => {
     const handleSubmit = async e => {
         e.preventDefault()
 
-        if (password.length < 6){
+        if (password.length < 6) {
             setAlert({ msg: "The password is too short", error: true })
             return;
         }
-
+        setCharging(true)
         try {
             const url = `/veterinarian/reset-password/${token}`
-            await axiosClient.post(url, {password})
-            setAlert({msg: "Password updated successfully"});
+            await axiosClient.post(url, { password })
+            setAlert({ msg: "Password updated successfully" });
             setPasswordSaved(true)
             setPassword('')
 
-            
+
         } catch (error) {
             setAlert({
                 msg: "There was an error in the link",
                 error: true
             })
         }
-        
+        setCharging(false)
+
     }
 
 
@@ -75,36 +78,39 @@ const NewPassword = () => {
                     {msg && <Alert alert={alert} />}
                     {validToken && (
                         <form className="w-full" onSubmit={handleSubmit}>
-                        <div className="mt-4">
-                            <label htmlFor="password"
-                                className="font-bold text-gray-500 text-xl block">
-                                New Password
-                            </label>
-                            <input id="password" type="password"
-                                className="border p-3 mt-3 w-full bg-gray-50 rounded-lg"
-                                placeholder="New Password" autoComplete="current-password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                            />
-                        </div>
+                            <div className="mt-4">
+                                <label htmlFor="password"
+                                    className="font-bold text-gray-500 text-xl block">
+                                    New Password
+                                </label>
+                                <input id="password" type="password"
+                                    className="border p-3 mt-3 w-full bg-gray-50 rounded-lg"
+                                    placeholder="New Password" autoComplete="current-password"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                />
+                            </div>
 
-                        <div className="mt-5">
-                            <input type="submit"
-                                className="uppercase font-extrabold bg-cyan-500 hover:bg-cyan-700 p-4 
-                                 w-full rounded-xl text-white mb-1"
-                                value="Save new password" />
-                        </div>
-                        {passwordSaved && (
-                            <nav className="mt-2 lg:flex lg:justify-between">
-                            <p className="text-gray-500 block text-center">
-                                Keeping On and {""}
-                                <Link to="/" className="text-cyan-600">Login! </Link></p>
-                        </nav>
-                        )}
-                        
-                    </form>
+                            <div className={`${charging ? "flex" : " hidden"} items-center flex-col justify-center  mt-10`}>
+                                <span className="loader"></span>
+                            </div>
+                            <div className="mt-10">
+                                <button type="submit"
+                                    className={`${charging ? "cursor-not-allowed bg-gray-300 pointer-events-none" : "bg-cyan-500 hover:bg-cyan-700 "} uppercase font-extrabold p-4 w-full rounded-xl text-white mb-1 `}>
+                                    Save new Password
+                                </button>
+                            </div>
+                            {passwordSaved && (
+                                <nav className="mt-2 lg:flex lg:justify-between">
+                                    <p className="text-gray-500 block text-center">
+                                        Keeping On and {""}
+                                        <Link to="/" className="text-cyan-600">Login! </Link></p>
+                                </nav>
+                            )}
+
+                        </form>
                     )}
-                    
+
                 </div>
             </div>
         </>
