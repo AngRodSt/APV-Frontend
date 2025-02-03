@@ -28,7 +28,7 @@ const PatientsList = () => {
                     <>
                         <h3 className="font-bold text-gray-700 text-xl text-center">No Patients</h3>
 
-                        <p className="mt-5 mb-10 text-center">Add a New Patient and {''} <span className="text-cyan-700 font-bold">Start Managing Them</span></p>
+                        <p className="mt-5 mb-10 text-center">Add a New Patient and {''} <span className="text-cyan-700 font-bold">Start Managing Them Here!</span></p>
                     </>
                 )}
             </div>

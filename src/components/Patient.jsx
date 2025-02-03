@@ -1,9 +1,12 @@
-
+import { useState } from "react";
 import usePatients from "../hooks/usePatients";
+import Card from "./Card";
+
 
 const Patient = ({ patient }) => {
     const { name, owner, email, date, symptoms, _id } = patient
     const {editPatient, deletePatient} = usePatients()
+    const [isOpen, setIsOpen] = useState(false)
 
     const formatDate = (date) => {
         const newDate = new Date(date);
@@ -25,11 +28,13 @@ const Patient = ({ patient }) => {
                     onClick={()=> editPatient(patient)}
                     >Edit</button>
                     <button className="bg-red-600 hover:bg-red-700 uppercase text-white font-bold px-10 py-2 rounded-md"
-                    onClick={()=> deletePatient(_id)}
+                    onClick={()=> { 
+                        setIsOpen(true)
+                    }}
                     >Delete</button>
                 </div>
+                {isOpen && <Card onClose={() => setIsOpen(false)} onConfirmDelete={() => deletePatient(_id)}/>}
             </div>
-
         </>
     )
 }
