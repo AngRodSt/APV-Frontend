@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import axiosClient from "../config/axios";
 import useAuth from "../hooks/useAuth";
+import Card from "../components/Card";
 
 const PatientsContext = createContext();
 
@@ -72,8 +73,6 @@ export const PatientProvider = ({ children }) => {
     }
 
     const deletePatient = async (id) => {
-        const isConfirmed = window.confirm("Do you want to delete the patient?");
-        if (isConfirmed) {
             try {
                 const token = localStorage.getItem('token');
                 const config = {
@@ -89,8 +88,7 @@ export const PatientProvider = ({ children }) => {
             } catch (error) {
                 console.log(error.response.data.msg)
             }
-        }
-        
+
     }
     return (
         <PatientsContext.Provider

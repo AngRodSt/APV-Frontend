@@ -49,7 +49,7 @@ const Form = () => {
             setId(null);
             setPatient([])
             
-        }, 2000);
+        }, 1000);
         
     }
 
