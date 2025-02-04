@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import Alert from "./Alert";
 import usePatients from "../hooks/usePatients";
 
+
 const Form = () => {
     const [name, setName] = useState("");
     const [owner, setOwner] = useState("");
@@ -9,6 +10,7 @@ const Form = () => {
     const [symptoms, setSymptoms] = useState("")
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [id, setId] = useState(null)
+    const [maxDate, setMaxDate] = useState("")
 
     const [alert, setAlert] = useState({})
     const [btnActive, setBtnActive] = useState(true)
@@ -16,6 +18,8 @@ const Form = () => {
     const { savePatient, patient, setPatient} = usePatients()
 
     useEffect(() => {
+        const today = new Date().toISOString().split("T")[0];
+        setMaxDate(today)
         if (patient?._id) {
             setName(patient.name);
             setOwner(patient.owner);
@@ -116,6 +120,7 @@ const Form = () => {
                             Discharge Date
                         </label>
                         <input id="date" type="date"
+                            max={maxDate}
                             className="border p-3 mt-3 w-full bg-gray-50 rounded-lg"
                             value={date}
                             onChange={e => setDate(e.target.value)}
